@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Class Browser</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="https://raw.github.com/ympbyc/sebone/master/bin/Sebone.js"></script>
+    <script src="src/classAnalyser.js"></script>
+    <script src="src/classbrowser.js"></script>
+    <style>
+      * {
+        padding:0; 
+        margin:0;
+        font-size:12px;
+      }
+      .selector-pane {
+        min-width: 50px;
+        min-height: 20px;
+      }
+      #classbrowser {
+        width: 640px;
+      }
+      .selector-pane, 
+      .classeditor {
+        border: 1px #000 solid;
+      }
+      .selector-pane {
+        width: 32.4%;
+        float: left;
+        height: 240px;
+        position: relative;
+      }
+      .classeditor, #editor {
+        width: 98%;
+        height: 240px;
+      }
+      .selector-pane li {
+        list-style-type: none;
+        cursor: pointer;
+      }
+      .selector-pane ul {
+        margin: 1px 0 0 5px;
+      }
+      #class-instance-switcher {
+        position: absolute;
+        bottom: 0;
+        width:100%;
+      }
+      #class-instance-switcher button {
+        width: 50%;
+      }
+      .scrollable {
+        height: 100%;
+        overflow: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="classbrowser">
+      <div class="classselector">
+        <div class="selector-pane">
+          <div class="scrollable">
+            <ul class="classes" id="class-pane">
+            </ul>
+          </div>
+          <div class="button-group" id="class-instance-switcher">
+            <button>Instance</button><button>Class</button>
+          </div>
+        </div>
+        <div class="selector-pane">
+          <ul>
+            <li style="background-color:#3261AB;color:#fff">-- all --</li>
+          </ul>
+        </div>
+        <div class="selector-pane">
+          <div class="scrollable">
+            <ul id="method-pane">
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="classeditor">
+        <textarea id="editor">
+        </textarea>
+      </div>
+    </div>
+  </body>
+</html>
