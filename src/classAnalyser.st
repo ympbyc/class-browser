@@ -15,20 +15,21 @@ isFunction := [:obj|
   || (<obj instanceof Function>)
 ].
 
-classAnalysis := [:obj|
+classAnalysis := [:obj :nameSpace|
+  nameSpace := nameSpace || ''.
   [
-    (Object keys:obj) forEach:[:key| |aClass|
+    (Object getOwnPropertyNames:obj) forEach:[:key| |aClass|
       (key charAt:0) toUpperCase === (key charAt:0) ifTrue:[ "is it a class?"
         | notConstructor |
         [(obj at:key) new] tryCatch:[
           "NameSpace?"
           notConstructor := true.
-          classAnalysis value:(obj at:key)
+          classAnalysis value:(obj at:key) value: nameSpace + key + '.'
         ].
   
         notConstructor ifFalse:[
           aClass := JsClass new.
-          aClass at:#className put:key.
+          aClass at:#className put:nameSpace + key.
           aClass at:#raw put:(obj at:key).
           aClass at:#superClass put:((obj at:key) at:#constructor)||[].
           instanceMethodsAnalysis value:aClass.
@@ -63,17 +64,20 @@ classMethodsAnalysis := [:aClass| | rawClass |
 ].
 
 classAnalysis value:window.
-classAnalysis value:#{
-  #Array   : Array
-  #Boolean : Boolean
-  #Date    : Date
-  #Function: Function
-  #Math    : Math
-  #Number  : Number
-  #Object  : Object
-  #RegExp  : RegExp
-  #String : String
-}.
+
+(window hasOwnProperty:#Object) ifFalse:[
+  classAnalysis value:#{
+    #Array   : Array
+    #Boolean : Boolean
+    #Date    : Date
+    #Function: Function
+    #Math    : Math
+    #Number  : Number
+    #Object  : Object
+    #RegExp  : RegExp
+    #String : String
+  }
+].
 
 window at:#classes put:classes.
 

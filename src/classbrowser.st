@@ -45,7 +45,9 @@ SbView subclass:#ClassPaneView variables:#(#selectedRow).
     edv := EditorView new.
     edv setModel:m.
     edv render
-  ]
+  ].
+  ($ value:'#classMethod') o:#click n:[whichMethods := #classMethods. selectedRow click].
+  ($ value:'#instanceMethod') o:#click n:[whichMethods := #instanceMethods. selectedRow click].
 !.
 
 SbView subclass:#MethodPaneView variables:#(#selectedRow).
@@ -93,7 +95,5 @@ SbView subclass:#AppView variables:#().
 !.
 
 $ value:[
-  ($ value:'#classMethod') o:#click n:[whichMethods := #classMethods].
-  ($ value:'#instanceMethod') o:#click n:[whichMethods := #instanceMethods].
   AppView new
 ]

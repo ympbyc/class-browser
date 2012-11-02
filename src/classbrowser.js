@@ -55,7 +55,7 @@
   };
   ClassPaneView.prototype.bindClickmodel = function (row, m) {
     var _this = this;
-    return row.on("click", function () {
+    row.on("click", function () {
       var mpv, edv;
       _this.selectedRow ? (function () {
         return _this.selectedRow.css({
@@ -74,6 +74,14 @@
       edv = new EditorView();
       edv.setModel(m);
       return edv.render();
+    });
+    $("#classMethod").on("click", function () {
+      whichMethods = "classMethods";
+      return _this.selectedRow.click();
+    });
+    return $("#instanceMethod").on("click", function () {
+      whichMethods = "instanceMethods";
+      return _this.selectedRow.click();
     });
   };
   var MethodPaneView;
@@ -161,12 +169,6 @@
     return clColl.fetch();
   };
   return $(function () {
-    $("#classMethod").on("click", function () {
-      return whichMethods = "classMethods";
-    });
-    $("#instanceMethod").on("click", function () {
-      return whichMethods = "instanceMethods";
-    });
     return new AppView();
   });
 }).call(this);
