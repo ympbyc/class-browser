@@ -39,26 +39,67 @@
     return ((typeof obj === "function") || obj instanceof Function);
   };
   classAnalysis = function (obj) {
-    return Object.keys(obj).forEach(function (key) {
-      var aClass;
-      return (key.charAt(0).toUpperCase() === key.charAt(0)) ? (function () {
-        aClass = new JsClass();
-        aClass.className = key;
-        aClass.raw = obj[key];
-        aClass.superClass = (obj[key].constructor || function () {
+    return (function () {
+      var _ret;
+      try {
+        _ret = (function () {
+          return Object.keys(obj).forEach(function (key) {
+            var aClass;
+            return (key.charAt(0).toUpperCase() === key.charAt(0)) ? (function () {
+              var notConstructor;
+              (function () {
+                var _ret;
+                try {
+                  _ret = (function () {
+                    return new obj[key]();
+                  })();
+                } catch (err) {
+                  _ret = function () {
+                    notConstructor = true;
+                    return classAnalysis(obj[key]);
+                  }(err);
+                }
+                return _ret;
+              })();
+              return notConstructor ? void 0 : (function () {
+                aClass = new JsClass();
+                aClass.className = key;
+                aClass.raw = obj[key];
+                aClass.superClass = (obj[key].constructor || function () {
+                  return null;
+                });
+                instanceMethodsAnalysis(aClass);
+                classMethodsAnalysis(aClass);
+                return classes.push(aClass);
+              })();
+            })() : void 0;
+          });
+        })();
+      } catch (err) {
+        _ret = function () {
           return null;
-        });
-        instanceMethodsAnalysis(aClass);
-        classMethodsAnalysis(aClass);
-        return classes.push(aClass);
-      })() : void 0;
-    });
+        }(err);
+      }
+      return _ret;
+    })();
   };
   instanceMethodsAnalysis = function (aClass) {
     var proto;
     proto = (aClass.raw.prototype || {});
-    return Object.keys(proto).forEach(function (key) {
-      return isFunction(proto[key]) ? ((function () {
+    return Object.getOwnPropertyNames(proto).forEach(function (key) {
+      return (function () {
+        var _ret;
+        try {
+          _ret = (function () {
+            return isFunction(proto[key]);
+          })();
+        } catch (err) {
+          _ret = function () {
+            return null;
+          }(err);
+        }
+        return _ret;
+      })() ? ((function () {
         return aClass.instanceMethods.push((function () {
           var _receiver = new JsMethod();
           _receiver.methodName = key;
@@ -73,8 +114,20 @@
   classMethodsAnalysis = function (aClass) {
     var rawClass;
     rawClass = aClass.raw;
-    return Object.keys(rawClass).forEach(function (key) {
-      return isFunction(rawClass[key]) ? ((function () {
+    return Object.getOwnPropertyNames(rawClass).forEach(function (key) {
+      return (function () {
+        var _ret;
+        try {
+          _ret = (function () {
+            return isFunction(rawClass[key]);
+          })();
+        } catch (err) {
+          _ret = function () {
+            return null;
+          }(err);
+        }
+        return _ret;
+      })() ? ((function () {
         return aClass.classMethods.push((function () {
           var _receiver = new JsMethod();
           _receiver.methodName = key;
@@ -87,6 +140,17 @@
     });
   };
   classAnalysis(window);
+  classAnalysis({
+    "Array": Array,
+    "Boolean": Boolean,
+    "Date": Date,
+    "Function": Function,
+    "Math": Math,
+    "Number": Number,
+    "Object": Object,
+    "RegExp": RegExp,
+    "String": String
+  });
   window.classes = classes;
   return classes;
 }).call(this);

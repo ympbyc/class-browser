@@ -1,8 +1,10 @@
-| SbModel SbCollection SbView |
+| SbModel SbCollection SbView whichMethods |
 
 SbModel := Sebone at:#Model.
 SbCollection := Sebone at:#Collection.
 SbView := Sebone at:#View.
+
+whichMethods := #instanceMethods.
 
 SbCollection subclass:#ClassCollection variables:#().
 !ClassCollection fetch
@@ -52,7 +54,7 @@ SbView subclass:#MethodPaneView variables:#(#selectedRow).
 !.
 !MethodPaneView render
   self el html:''.
-  (self model at:#instanceMethods) forEach:[:im| |row|
+  (self model at:whichMethods) forEach:[:im| |row|
     row := $ value:'<li>'.
     row text:(im at:#methodName).
     self bindClick:row model:im.
@@ -91,5 +93,7 @@ SbView subclass:#AppView variables:#().
 !.
 
 $ value:[
+  ($ value:'#classMethod') o:#click n:[whichMethods := #classMethods].
+  ($ value:'#instanceMethod') o:#click n:[whichMethods := #instanceMethods].
   AppView new
 ]

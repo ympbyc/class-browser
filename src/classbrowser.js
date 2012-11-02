@@ -1,9 +1,10 @@
 (function () {
   "use strict";
-  var SbModel, SbCollection, SbView;
+  var SbModel, SbCollection, SbView, whichMethods;
   SbModel = Sebone.Model;
   SbCollection = Sebone.Collection;
   SbView = Sebone.View;
+  whichMethods = "instanceMethods";
   var ClassCollection;
   ClassCollection = function () {
     if (this.init) {
@@ -93,7 +94,7 @@
   MethodPaneView.prototype.render = function () {
     var _this = this;
     _this.el().html("");
-    return _this.model().instanceMethods.forEach(function (im) {
+    return _this.model()[whichMethods].forEach(function (im) {
       var row;
       row = $("<li>");
       row.text(im.methodName);
@@ -160,6 +161,12 @@
     return clColl.fetch();
   };
   return $(function () {
+    $("#classMethod").on("click", function () {
+      return whichMethods = "classMethods";
+    });
+    $("#instanceMethod").on("click", function () {
+      return whichMethods = "instanceMethods";
+    });
     return new AppView();
   });
 }).call(this);
