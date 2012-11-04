@@ -167,12 +167,12 @@
         try {
           _ret = (function () {
             eval(_this.model().fullpath + " = fn");
-            return $((((("<p>" + _this.model().fullpath) + " = ") + fn) + "</p>"));
+            return $((((("<pre>" + _this.model().fullpath) + " = ") + fn) + "</pre>"));
           })();
         } catch (err) {
           _ret = function () {
             eval("window." + _this.model().fullpath + " = fn");
-            return $(((((("<p>" + "window.") + _this.model().fullpath) + " = ") + fn) + "</p>"));
+            return $(((((("<pre>" + "window.") + _this.model().fullpath) + " = ") + fn) + "</pre>"));
           }(err);
         }
         return _ret;

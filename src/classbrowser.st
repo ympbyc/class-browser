@@ -93,10 +93,10 @@ SbView subclass:#EditorView variables:#().
     fn := (eval value: '(' + self el val + ')').
     self model at:#raw put:fn.
     ([ <eval(_this.model().fullpath+" = fn")>.
-      $ value:'<p>'+(self model at:#fullpath)+' = '+fn+'</p>'
+      $ value:'<pre>'+(self model at:#fullpath)+' = '+fn+'</pre>'
     ] tryCatch:[
       <eval("window."+_this.model().fullpath+" = fn")>.
-      $ value:'<p>'+'window.'+(self model at:#fullpath)+' = '+fn+'</p>'
+      $ value:'<pre>'+'window.'+(self model at:#fullpath)+' = '+fn+'</pre>'
     ]) appendTo:'#changeset'
   ]
 !.
