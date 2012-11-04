@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <title>Class Browser</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
     <script src="https://raw.github.com/ympbyc/sebone/master/bin/Sebone.js"></script>
+
     <script src="src/classAnalyser.js"></script>
     <script src="src/classbrowser.js"></script>
     <style>
@@ -24,13 +26,13 @@
         border: 1px #000 solid;
       }
       .selector-pane {
-        width: 32.4%;
+        width: 49.5%;
         float: left;
         height: 240px;
         position: relative;
       }
       .classeditor, #editor {
-        width: 98%;
+        width: 99%;
         height: 240px;
       }
       .selector-pane li {
@@ -52,6 +54,10 @@
         height: 100%;
         overflow: scroll;
       }
+      #save {
+        float:right;
+        margin-right:10px;
+      }
     </style>
   </head>
   <body>
@@ -67,11 +73,11 @@
             <input type="radio" name="whichmethod" id="classMethod"/> Class
           </div>
         </div>
-        <div class="selector-pane">
+        <!--div class="selector-pane">
           <ul>
             <li style="background-color:#3261AB;color:#fff">-- all --</li>
           </ul>
-        </div>
+        </div-->
         <div class="selector-pane">
           <div class="scrollable">
             <ul id="method-pane">
@@ -82,7 +88,10 @@
       <div id="classeditor">
         <textarea id="editor">
         </textarea>
+        <button id="save">save</button>
       </div>
+    </div><br />
+    <div id="changeset">
     </div>
   </body>
 </html>
