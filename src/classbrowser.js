@@ -140,17 +140,44 @@
   EditorView.prototype = new SbView();
   EditorView.prototype.init = function () {
     var _this = this;
-    return _this.setUIConstructor(function () {
+    _this.setUIConstructor(function () {
       return $("#editor");
     });
+    return _this.listenUIEvents();
   };
   EditorView.prototype.render = function () {
     var _this = this;
-    return _this.el().text(_this.model().raw.toString());
+    return _this.el().val(_this.model().raw.toString());
   };
   EditorView.prototype.updateto = function (prop, val) {
     var _this = this;
     return _this.render();
+  };
+  EditorView.prototype.listenUIEvents = function () {
+    var _this = this;
+    var saveBtn;
+    saveBtn = $("#save");
+    saveBtn.off();
+    return saveBtn.on("click", function () {
+      var fn, slot;
+      fn = eval((("(" + _this.el().val()) + ")"));
+      _this.model().raw = fn;
+      return (function () {
+        var _ret;
+        try {
+          _ret = (function () {
+            eval(_this.model().fullpath + " = fn");
+            return $((((("<p>" + _this.model().fullpath) + " = ") + fn) + "</p>"));
+          })();
+        } catch (err) {
+          _ret = function () {
+            eval("window." + _this.model().fullpath + " = fn");
+            return $(((((("<p>" + "window.") + _this.model().fullpath) + " = ") + fn) + "</p>"));
+          }(err);
+        }
+        return _ret;
+      })().appendTo("#changeset");
+    });
   };
   var AppView;
   AppView = function () {

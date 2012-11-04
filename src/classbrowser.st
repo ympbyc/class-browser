@@ -77,13 +77,28 @@ SbView subclass:#MethodPaneView variables:#(#selectedRow).
 
 SbView subclass:#EditorView variables:#().
 !EditorView init
-  self setUIConstructor:[$ value:'#editor']
+  self setUIConstructor:[$ value:'#editor'].
+  self listenUIEvents
 !.
 !EditorView render
-  self el text: (self model at:#raw) toString
+  self el val: (self model at:#raw) toString
 !.
 !EditorView update:prop to:val
   self render
+!.
+!EditorView listenUIEvents |saveBtn|
+  saveBtn := $ value:'#save'.
+  saveBtn off.
+  saveBtn o:#click n:[|fn slot|
+    fn := (eval value: '(' + self el val + ')').
+    self model at:#raw put:fn.
+    ([ <eval(_this.model().fullpath+" = fn")>.
+      $ value:'<p>'+(self model at:#fullpath)+' = '+fn+'</p>'
+    ] tryCatch:[
+      <eval("window."+_this.model().fullpath+" = fn")>.
+      $ value:'<p>'+'window.'+(self model at:#fullpath)+' = '+fn+'</p>'
+    ]) appendTo:'#changeset'
+  ]
 !.
 
 SbView subclass:#AppView variables:#().

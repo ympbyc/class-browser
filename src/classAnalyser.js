@@ -11,6 +11,7 @@
     this.classMethods = null;
     this.classVariables = null;
     this.raw = null;
+    this.fullpath = null;
     if (this.init) {
       this.init.apply(this, arguments);
     }
@@ -28,6 +29,7 @@
   JsMethod = function () {
     this.methodName = null;
     this.raw = null;
+    this.fullpath = null;
     if (this.init) {
       this.init.apply(this, arguments);
     }
@@ -56,8 +58,10 @@
                   })();
                 } catch (err) {
                   _ret = function () {
-                    notConstructor = true;
-                    return classAnalysis(obj[key], ((nameSpace + key) + "."));
+                    return {}.hasOwnProperty.call("create", obj[key]) ? void 0 : (function () {
+                      notConstructor = true;
+                      return classAnalysis(obj[key], ((nameSpace + key) + "."));
+                    })();
                   }(err);
                 }
                 return _ret;
@@ -66,6 +70,7 @@
                 aClass = new JsClass();
                 aClass.className = (nameSpace + key);
                 aClass.raw = obj[key];
+                aClass.fullpath = (nameSpace + key);
                 aClass.superClass = (obj[key].constructor || function () {
                   return null;
                 });
@@ -105,6 +110,7 @@
           var _receiver = new JsMethod();
           _receiver.methodName = key;
           _receiver.raw = proto[key];
+          _receiver.fullpath = ((aClass.className + ".prototype.") + key);
           return _receiver;
         })());
       }))() : (function () {
@@ -133,6 +139,7 @@
           var _receiver = new JsMethod();
           _receiver.methodName = key;
           _receiver.raw = rawClass[key];
+          _receiver.fullpath = ((aClass.className + ".") + key);
           return _receiver;
         })());
       }))() : (function () {
