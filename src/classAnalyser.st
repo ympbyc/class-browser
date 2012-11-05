@@ -22,11 +22,9 @@ classAnalysis := [:obj :nameSpace|
       (key charAt:0) toUpperCase === (key charAt:0) ifTrue:[ "is it a class?"
         | notConstructor |
         [(obj at:key) new] tryCatch:[
-          ((#{} at:#hasOwnProperty) ca:#create ll:(obj at:key)) ifFalse:[
-            "NameSpace?"
-            notConstructor := true.
-            classAnalysis value:(obj at:key) value: nameSpace + key + '.'
-          ]
+          "NameSpace?"
+          notConstructor := true.
+          classAnalysis value:(obj at:key) value: nameSpace + key + '.'
         ].
   
         notConstructor ifFalse:[
@@ -41,7 +39,7 @@ classAnalysis := [:obj :nameSpace|
         ]
       ]
     ]
-  ] tryCatch:[]
+  ] tryCatch:[:e|console log:e]
 ].
 
 instanceMethodsAnalysis := [:aClass| | proto |

@@ -38,10 +38,10 @@
   JsMethod.prototype = new SbModel();
   classes = [];
   isFunction = function (obj) {
-    return ((typeof obj === "function") || obj instanceof Function);
+    return ((typeof obj === 'function') || obj instanceof Function);
   };
   classAnalysis = function (obj, nameSpace) {
-    nameSpace = (nameSpace || "");
+    nameSpace = (nameSpace || '');
     return (function () {
       var _ret;
       try {
@@ -58,10 +58,8 @@
                   })();
                 } catch (err) {
                   _ret = function () {
-                    return {}.hasOwnProperty.call("create", obj[key]) ? void 0 : (function () {
-                      notConstructor = true;
-                      return classAnalysis(obj[key], ((nameSpace + key) + "."));
-                    })();
+                    notConstructor = true;
+                    return classAnalysis(obj[key], ((nameSpace + key) + '.'));
                   }(err);
                 }
                 return _ret;
@@ -82,8 +80,8 @@
           });
         })();
       } catch (err) {
-        _ret = function () {
-          return null;
+        _ret = function (e) {
+          return console.log(e);
         }(err);
       }
       return _ret;
@@ -110,7 +108,7 @@
           var _receiver = new JsMethod();
           _receiver.methodName = key;
           _receiver.raw = proto[key];
-          _receiver.fullpath = ((aClass.className + ".prototype.") + key);
+          _receiver.fullpath = ((aClass.className + '.prototype.') + key);
           return _receiver;
         })());
       }))() : (function () {
@@ -139,7 +137,7 @@
           var _receiver = new JsMethod();
           _receiver.methodName = key;
           _receiver.raw = rawClass[key];
-          _receiver.fullpath = ((aClass.className + ".") + key);
+          _receiver.fullpath = ((aClass.className + '.') + key);
           return _receiver;
         })());
       }))() : (function () {
@@ -148,17 +146,17 @@
     });
   };
   classAnalysis(window);
-  window.hasOwnProperty("Object") ? void 0 : (function () {
+  window.hasOwnProperty('Object') ? void 0 : (function () {
     return classAnalysis({
-      "Array": Array,
-      "Boolean": Boolean,
-      "Date": Date,
-      "Function": Function,
-      "Math": Math,
-      "Number": Number,
-      "Object": Object,
-      "RegExp": RegExp,
-      "String": String
+      'Array': Array,
+      'Boolean': Boolean,
+      'Date': Date,
+      'Function': Function,
+      'Math': Math,
+      'Number': Number,
+      'Object': Object,
+      'RegExp': RegExp,
+      'String': String
     });
   })();
   window.classes = classes;
