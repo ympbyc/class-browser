@@ -1,66 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Class Browser</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
-    <script src="https://raw.github.com/ympbyc/sebone/master/bin/Sebone.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Class Browser</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
+  <script src="https://raw.github.com/ympbyc/sebone/master/bin/Sebone.js"></script>
+  <script src="https://raw.github.com/raimohanska/bacon.js/master/lib/Bacon.js"></script>
 
-    <script src="src/classAnalyser.js"></script>
-    <script src="src/classbrowser.js"></script>
-    <style>
-      * {
-        padding:0; 
-        margin:0;
-        font-size:12px;
-      }
-      .selector-pane {
-        min-width: 50px;
-        min-height: 20px;
-      }
-      #classbrowser {
-        width: 640px;
-      }
-      .selector-pane, 
-      .classeditor {
-        border: 1px #000 solid;
-      }
-      .selector-pane {
-        width: 49.5%;
-        float: left;
-        height: 240px;
-        position: relative;
-      }
-      .classeditor, #editor {
-        width: 99%;
-        height: 240px;
-      }
-      .selector-pane li {
-        list-style-type: none;
-        cursor: pointer;
-      }
-      .selector-pane ul {
-        margin: 1px 0 0 5px;
-      }
-      #class-instance-switcher {
-        position: absolute;
-        bottom: 0;
-        width:100%;
-      }
-      #class-instance-switcher button {
-        width: 50%;
-      }
-      .scrollable {
-        height: 100%;
-        overflow: scroll;
-      }
-      #save {
-        float:right;
-        margin-right:10px;
-      }
-    </style>
-  </head>
-  <body>
+  <script src="src/classAnalyser.js"></script>
+  <script src="src/classbrowser.js"></script>
+
+  <script src="vendor/sh_main.js"></script>
+  <script src="vendor/sh_javascript.js"></script>
+  <link rel="stylesheet" href="vendor/sh_pablo.css">
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <div class="wrapper">
+    <h1 id="title">Javascript Class Browser</h1>
     <div id="classbrowser">
       <div class="classselector">
         <div class="selector-pane">
@@ -73,11 +32,6 @@
             <input type="radio" name="whichmethod" id="classMethod"/> Class
           </div>
         </div>
-        <!--div class="selector-pane">
-          <ul>
-            <li style="background-color:#3261AB;color:#fff">-- all --</li>
-          </ul>
-        </div-->
         <div class="selector-pane">
           <div class="scrollable">
             <ul id="method-pane">
@@ -85,13 +39,15 @@
           </div>
         </div>
       </div>
+      <br style="clear:both;" />
       <div id="classeditor">
-        <textarea id="editor">
-        </textarea>
-        <button id="save">save</button>
+        <div id="editor">
+          <pre class="sh_javascript" id="editor-content">
+          </pre>
+        </div>
       </div>
-    </div><br />
-    <div id="changeset">
     </div>
-  </body>
+    <button id="color-scheme">light</button>
+  </div>
+</body>
 </html>
