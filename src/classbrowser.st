@@ -4,10 +4,12 @@ SbModel := Sebone at:#Model.
 SbCollection := Sebone at:#Collection.
 SbView := Sebone at:#View.
 
-whichMethods := #instanceMethods.
+whichMethods := #instanceMethods. "toggle between #instanceMethods and #classMethods"
 
 SbCollection subclass:#ClassCollection variables:#().
+"Collection of classes displayed in the class pane"
 !ClassCollection fetch
+  "classAnalyser puts them in window"
   (window at:#classes) forEach:[:cl|
     self add:cl
   ]
@@ -77,36 +79,37 @@ SbView subclass:#MethodPaneView variables:#(#selectedRow).
 
 SbView subclass:#EditorView variables:#().
 !EditorView init
-  self setUIConstructor:[$ value:'#editor'].
-  self listenUIEvents
+  self setUIConstructor:[$ value:'#editor-content']
 !.
 !EditorView render
-  self el val: (self model at:#raw) toString
+  self el text: (self model at:#raw) toString.
+  window sh_highlightDocument
 !.
 !EditorView update:prop to:val
   self render
 !.
-!EditorView listenUIEvents |saveBtn|
-  saveBtn := $ value:'#save'.
-  saveBtn off.
-  saveBtn o:#click n:[|fn slot|
-    fn := (eval value: '(' + self el val + ')').
-    self model at:#raw put:fn.
-    ([ <eval(_this.model().fullpath+" = fn")>.
-      $ value:'<pre>'+(self model at:#fullpath)+' = '+fn+'</pre>'
-    ] tryCatch:[
-      <eval("window."+_this.model().fullpath+" = fn")>.
-      $ value:'<pre>'+'window.'+(self model at:#fullpath)+' = '+fn+'</pre>'
-    ]) appendTo:'#changeset'
-  ]
-!.
+
 
 SbView subclass:#AppView variables:#().
 !AppView init | clColl clPane |
   clColl := ClassCollection new.
   clPane := ClassPaneView new.
   clPane setModel:clColl.
-  clColl fetch
+  clColl fetch.
+
+  self listenEvents
+!.
+!AppView listenEvents | changeSchemeBtn |
+  changeSchemeBtn := ($ value:'#color-scheme').
+  changeSchemeBtn o:#click n:[ :e |
+    changeSchemeBtn text === 'light' ifTrue:[
+      changeSchemeBtn text: 'dark'.
+      ($ value:'pre.sh_sourceCode') css: #{#backgroundColor:'#fff' #color:'#000'}
+    ] ifFalse: [
+       changeSchemeBtn text: 'light'.
+      ($ value:'pre.sh_sourceCode') css: #{#backgroundColor:'#342826' #color:'#fff'}
+    ]
+  ]
 !.
 
 $ value:[

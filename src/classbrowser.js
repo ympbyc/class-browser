@@ -4,7 +4,7 @@
   SbModel = Sebone.Model;
   SbCollection = Sebone.Collection;
   SbView = Sebone.View;
-  whichMethods = "instanceMethods";
+  whichMethods = 'instanceMethods';
   var ClassCollection;
   ClassCollection = function () {
     if (this.init) {
@@ -31,15 +31,15 @@
   ClassPaneView.prototype.init = function () {
     var _this = this;
     return _this.setUIConstructor(function () {
-      return $("#class-pane");
+      return $('#class-pane');
     });
   };
   ClassPaneView.prototype.render = function () {
     var _this = this;
-    _this.el().html("");
+    _this.el().html('');
     return _this.model().each(function (cl) {
       var row;
-      row = $("<li>");
+      row = $('<li>');
       row.text(cl.className);
       _this.bindClickmodel(row, cl);
       return row.appendTo(_this.el());
@@ -48,24 +48,24 @@
   ClassPaneView.prototype.onAdd = function (cl) {
     var _this = this;
     var row;
-    row = $("<li>");
+    row = $('<li>');
     row.text(cl.className);
     _this.bindClickmodel(row, cl);
     return row.appendTo(_this.el());
   };
   ClassPaneView.prototype.bindClickmodel = function (row, m) {
     var _this = this;
-    row.on("click", function () {
+    row.on('click', function () {
       var mpv, edv;
       _this.selectedRow ? (function () {
         return _this.selectedRow.css({
-          "backgroundColor": "#fff",
-          "color": "#000"
+          'backgroundColor': '#fff',
+          'color': '#000'
         });
       })() : void 0;
       row.css({
-        "backgroundColor": "#3261AB",
-        "color": "#fff"
+        'backgroundColor': '#3261AB',
+        'color': '#fff'
       });
       _this.selectedRow = row;
       mpv = new MethodPaneView();
@@ -75,12 +75,12 @@
       edv.setModel(m);
       return edv.render();
     });
-    $("#classMethod").on("click", function () {
-      whichMethods = "classMethods";
+    $('#classMethod').on('click', function () {
+      whichMethods = 'classMethods';
       return _this.selectedRow.click();
     });
-    return $("#instanceMethod").on("click", function () {
-      whichMethods = "instanceMethods";
+    return $('#instanceMethod').on('click', function () {
+      whichMethods = 'instanceMethods';
       return _this.selectedRow.click();
     });
   };
@@ -96,15 +96,15 @@
   MethodPaneView.prototype.init = function () {
     var _this = this;
     return _this.setUIConstructor(function () {
-      return $("#method-pane");
+      return $('#method-pane');
     });
   };
   MethodPaneView.prototype.render = function () {
     var _this = this;
-    _this.el().html("");
+    _this.el().html('');
     return _this.model()[whichMethods].forEach(function (im) {
       var row;
-      row = $("<li>");
+      row = $('<li>');
       row.text(im.methodName);
       _this.bindClickmodel(row, im);
       return row.appendTo(_this.el());
@@ -112,17 +112,17 @@
   };
   MethodPaneView.prototype.bindClickmodel = function (row, m) {
     var _this = this;
-    return row.on("click", function () {
+    return row.on('click', function () {
       var edv;
       _this.selectedRow ? (function () {
         return _this.selectedRow.css({
-          "backgroundColor": "#fff",
-          "color": "#000"
+          'backgroundColor': '#fff',
+          'color': '#000'
         });
       })() : void 0;
       row.css({
-        "backgroundColor": "#3261AB",
-        "color": "#fff"
+        'backgroundColor': '#3261AB',
+        'color': '#fff'
       });
       _this.selectedRow = row;
       edv = new EditorView();
@@ -140,44 +140,18 @@
   EditorView.prototype = new SbView();
   EditorView.prototype.init = function () {
     var _this = this;
-    _this.setUIConstructor(function () {
-      return $("#editor");
+    return _this.setUIConstructor(function () {
+      return $('#editor-content');
     });
-    return _this.listenUIEvents();
   };
   EditorView.prototype.render = function () {
     var _this = this;
-    return _this.el().val(_this.model().raw.toString());
+    _this.el().text(_this.model().raw.toString());
+    return window.sh_highlightDocument();
   };
   EditorView.prototype.updateto = function (prop, val) {
     var _this = this;
     return _this.render();
-  };
-  EditorView.prototype.listenUIEvents = function () {
-    var _this = this;
-    var saveBtn;
-    saveBtn = $("#save");
-    saveBtn.off();
-    return saveBtn.on("click", function () {
-      var fn, slot;
-      fn = eval((("(" + _this.el().val()) + ")"));
-      _this.model().raw = fn;
-      return (function () {
-        var _ret;
-        try {
-          _ret = (function () {
-            eval(_this.model().fullpath + " = fn");
-            return $((((("<pre>" + _this.model().fullpath) + " = ") + fn) + "</pre>"));
-          })();
-        } catch (err) {
-          _ret = function () {
-            eval("window." + _this.model().fullpath + " = fn");
-            return $(((((("<pre>" + "window.") + _this.model().fullpath) + " = ") + fn) + "</pre>"));
-          }(err);
-        }
-        return _ret;
-      })().appendTo("#changeset");
-    });
   };
   var AppView;
   AppView = function () {
@@ -193,7 +167,28 @@
     clColl = new ClassCollection();
     clPane = new ClassPaneView();
     clPane.setModel(clColl);
-    return clColl.fetch();
+    clColl.fetch();
+    return _this.listenEvents();
+  };
+  AppView.prototype.listenEvents = function () {
+    var _this = this;
+    var changeSchemeBtn;
+    changeSchemeBtn = $('#color-scheme');
+    return changeSchemeBtn.on('click', function (e) {
+      return (changeSchemeBtn.text() === 'light') ? ((function () {
+        changeSchemeBtn.text('dark');
+        return $('pre.sh_sourceCode').css({
+          'backgroundColor': '#fff',
+          'color': '#000'
+        });
+      }))() : (function () {
+        changeSchemeBtn.text('light');
+        return $('pre.sh_sourceCode').css({
+          'backgroundColor': '#342826',
+          'color': '#fff'
+        });
+      })();
+    });
   };
   return $(function () {
     return new AppView();
